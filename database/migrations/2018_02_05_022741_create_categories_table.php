@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProfilesTable extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('profiles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('points')->default(0);
-            $table->date('birthday')->default('2000-01-01');
+        Schema::create('categories', function (Blueprint $table) {
+            $table->string('name')->unique()->piarmay();
+            $table->string('description')->default('nothing yet!');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateProfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profiles');
+        Schema::dropIfExists('categories');
     }
 }
