@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,3 +15,15 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/article/{article}/comment', 'ArticleController@getComment');
+Route::resource('/article', 'ArticleController');
+
+Route::post('/comment/{comment}/like', 'CommentController@like');
+Route::delete('/comment/{comment}/like', 'CommentController@unlike');
+Route::resource('/comment', 'CommentController');
+
+
+
+

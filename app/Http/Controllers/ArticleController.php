@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,8 +17,9 @@ class ArticleController extends Controller
     public function index()
     {
         //
-      $articles = Article::query()->paginate(15);
-      return self::success();
+      $articles = Article::with('categories')->take(10)->get();
+
+      return self::success($articles);
     }
 
     /**
@@ -104,5 +106,14 @@ class ArticleController extends Controller
         logger($e);
         return self::fail();
       }
+    }
+
+    public function getComments(Article $article) {
+      $comment = $article->comments()->pageinate(15)->get();
+      return self::success($comment);
+    }
+
+    public function findArticlesByCategory(Request $request) {
+
     }
 }
