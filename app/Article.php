@@ -10,10 +10,10 @@ class Article extends Model
     protected $fillable = ['title', 'content', 'author_id'];
     //
     public function author() {
-        $this->hasOne('App\User');
+        return $this->hasOne('App\User', 'id', 'author_id');
     }
     public function comments() {
-        $this->hasMany("app\Comment");
+        return $this->hasMany("App\Comment");
     }
     public function categories() {
         return $this->belongsToMany('App\Category','article_category');

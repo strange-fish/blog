@@ -17,13 +17,9 @@ class ArticleController extends Controller
     public function index()
     {
         //
-      $articles = Article::with(['categories' => function($query) {
-        $query->select('name');
-      }])
+      $articles = Article::with('author')
         ->where('id', '=', 11)
         ->get();
-
-
 
       return self::success($articles);
     }
@@ -67,6 +63,7 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         //
+      $article->categories = $article->categories()->get();
       return self::success($article);
     }
 

@@ -28,12 +28,12 @@ class User extends Authenticatable
     ];
 
     public function articles() {
-        $this->hasMany('App\Article');
+        return $this->hasMany('App\Article');
     }
     public function comments() {
-        $this->hasMany("App\Comment");
+        return $this->hasMany("App\Comment");
     }
     public function profile() {
-        $this->hasOne('App\Profile');
+        return $this->hasOne('App\Profile');
     }
 }
