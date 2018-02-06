@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    protected $fillable = ['content', 'author_id'];
+    protected $fillable = ['title', 'content', 'author_id'];
     //
     public function author() {
         $this->hasOne('App\User');
