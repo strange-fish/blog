@@ -10,17 +10,17 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
 
-    public function __construct()
-    {
+    public function __construct() {
       $this->middleware('auth');
     }
 
-  /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index() {
+      return self::success(['data' => Comment::query()->paginate()]);
     }
 
 
@@ -94,4 +94,5 @@ class CommentController extends Controller
       $comment->likes()->detach(Auth::user()->id);
       return self::success();
     }
+    
 }

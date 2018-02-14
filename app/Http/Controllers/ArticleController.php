@@ -57,26 +57,17 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Article  $article
+     * @param  number $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Article $article)
+    public function show($id)
     {
         //
-      $article->categories = $article->categories()->get();
+      $article = Article::with('categories')->find($id)->get();
       return self::success($article);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Article  $article
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Article $article)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -116,7 +107,4 @@ class ArticleController extends Controller
       return self::success($comment);
     }
 
-    public function findArticlesByCategory(Request $request) {
-
-    }
 }
