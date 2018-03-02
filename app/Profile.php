@@ -8,4 +8,8 @@ class Profile extends Model
 {
     //
     protected $fillable = ['birthday', 'user_id', 'points'];
+
+    public function user() {
+      return $this->belongsTo('App\User');
+    }
 }

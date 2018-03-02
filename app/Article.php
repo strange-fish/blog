@@ -18,4 +18,7 @@ class Article extends Model
     public function categories() {
         return $this->belongsToMany('App\Category','article_category');
     }
+    public function lovers() {
+        return $this->belongsToMany('App\User', 'article_like');
+    }
 }

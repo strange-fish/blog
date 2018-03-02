@@ -18,13 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/article/{article}/comment', 'ArticleController@getComment');
-Route::resource('/article', 'ArticleController');
+Route::get('/articles/{article}/comment', 'ArticleController@getComments');;
+Route::post('articles/{article}/like', 'ArticleController@like');
+Route::resource('/articles', 'ArticleController');
 
-Route::post('/comment/{comment}/like', 'CommentController@like');
-Route::delete('/comment/{comment}/like', 'CommentController@unlike');
-Route::resource('/comment', 'CommentController');
-
+Route::post('/comments/{comment}/like', 'CommentController@like');
+Route::delete('/comments/{comment}/like', 'CommentController@unlike');
+Route::resource('/comments', 'CommentController');
 
 
 

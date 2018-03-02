@@ -9,30 +9,24 @@ use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
-    /**
+
+  /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+      $this->middleware('auth:api');
+    }
+
     public function index()
     {
-        //
-      $articles = Article::with('author')
-        ->where('id', '=', 11)
-        ->get();
+      $articles = Article::with('author')->get();
 
       return self::success($articles);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -47,10 +41,11 @@ class ArticleController extends Controller
         'title' => 'required|max:100',
         'content' => 'required',
       ]);
-      $aritlce = new Article;
-      $aritlce->title = $request->get('title');
-      $aritlce->content = $request->get('content');
-      Auth::user()->articles()->create($aritlce)->save();
+      Article::query()->create([
+        'author_id' => Auth::id(),
+        'title' => $request->get('title'),
+        'content' => $request->get('content'),
+      ])->save();
       return self::success();
     }
 
@@ -63,8 +58,9 @@ class ArticleController extends Controller
     public function show($id)
     {
         //
-      $article = Article::with('categories')->find($id)->get();
-      return self::success($article);
+      $article = Article::with('categories')->find($id);
+
+      return $article ? self::success($article) : self::fail("doesn't exist!");
     }
 
 
@@ -83,16 +79,18 @@ class ArticleController extends Controller
       $article->content = $request->get('content');
       $article->title = $request->get('title');
       $article->save();
-      return self::success();
+      return self::success($article);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Article  $article
+     * @param  number $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Article $article) {
+    public function destroy($id) {
+      $article = Article::query()->find($id);
+      if(!$article) return self::fail("doesn't exist!");
       try {
         $article->delete();
         return self::success();
@@ -103,8 +101,13 @@ class ArticleController extends Controller
     }
 
     public function getComments(Article $article) {
-      $comment = $article->comments()->pageinate(15)->get();
+      $comment = $article->comments()->get();
       return self::success($comment);
+    }
+
+    public function like(Article $article) {
+      $article->lovers()->attach(Auth::id());
+      return self::success();
     }
 
 }
