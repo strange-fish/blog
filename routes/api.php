@@ -18,14 +18,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/articles/{article}/comment', 'ArticleController@getComments');;
-Route::post('articles/{article}/like', 'ArticleController@like');
+
+Route::prefix('articles')->group(function () {
+  Route::get('/admin', 'ArticleController@getAdmin');
+  Route::get('/{article}/comment', 'ArticleController@getComments');
+  Route::post('/{article}/like', 'ArticleController@like');
+  Route::delete('/{article}/like', 'ArticleController@unlike');
+});
 Route::resource('/articles', 'ArticleController');
 
-Route::post('/comments/{comment}/like', 'CommentController@like');
-Route::delete('/comments/{comment}/like', 'CommentController@unlike');
+Route::prefix('/comments')->group(function() {
+  Route::post('/{comment}/like', 'CommentController@like');
+  Route::delete('/{comment}/like', 'CommentController@unlike');
+});
 Route::resource('/comments', 'CommentController');
-
 
 
 Route::get('/home', 'HomeController@index')->name('home');

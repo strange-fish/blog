@@ -29,12 +29,15 @@ class User extends Authenticatable
     ];
 
     public function articles() {
-        return $this->hasMany('App\Article');
+        return $this->hasMany('App\Article', 'author_id');
     }
     public function comments() {
         return $this->hasMany("App\Comment");
     }
     public function profile() {
         return $this->hasOne('App\Profile');
+    }
+    public function likeArticles() {
+      return $this->belongsToMany('App\Article', 'article_like');
     }
 }

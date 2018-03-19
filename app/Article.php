@@ -16,9 +16,9 @@ class Article extends Model
         return $this->hasMany("App\Comment");
     }
     public function categories() {
-        return $this->belongsToMany('App\Category','article_category');
+        return $this->belongsToMany('App\Category','article_category')->withTimestamps();
     }
     public function lovers() {
-        return $this->belongsToMany('App\User', 'article_like');
+        return $this->belongsToMany('App\User', 'article_like')->withTimestamps();
     }
 }

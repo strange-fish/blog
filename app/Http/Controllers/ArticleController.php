@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-use App\Category;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+
 
 class ArticleController extends Controller
 {
@@ -49,6 +51,15 @@ class ArticleController extends Controller
       return self::success();
     }
 
+  /**
+   * get the articles that belongs to the current user!
+   * @return \Illuminate\Http\Response
+   */
+
+    public function getAdmin() {
+      return self::success(Auth::user()->articles);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -63,8 +74,6 @@ class ArticleController extends Controller
       return $article ? self::success($article) : self::fail("doesn't exist!");
     }
 
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -76,9 +85,7 @@ class ArticleController extends Controller
     {
       $this->validate($request, ['title' => 'nullable|max:100']);
 
-      $article->content = $request->get('content');
-      $article->title = $request->get('title');
-      $article->save();
+      $article->fill($request->all())->save();
       return self::success($article);
     }
 
@@ -95,19 +102,22 @@ class ArticleController extends Controller
         $article->delete();
         return self::success();
       } catch(\Exception $e) {
-        logger($e);
         return self::fail();
       }
     }
 
     public function getComments(Article $article) {
       $comment = $article->comments()->get();
+
       return self::success($comment);
     }
 
-    public function like(Article $article) {
-      $article->lovers()->attach(Auth::id());
+    public function like($article, User $user) {
+      $user->likeArticles()->syncWithoutDetaching($article);
       return self::success();
     }
-
+    public function unlike($article) {
+      $res = Auth::user()->likeArticles()->detach($article);
+      return $res ? self::success() : self::fail('already deleted!');
+    }
 }
