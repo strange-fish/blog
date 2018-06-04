@@ -9,16 +9,19 @@ class Article extends Model
 {
     protected $fillable = ['title', 'content', 'author_id'];
     //
-    public function author() {
-        return $this->hasOne('App\User', 'id', 'author_id');
+    public function author () {
+      return $this->hasOne('App\User', 'id', 'author_id');
     }
-    public function comments() {
-        return $this->hasMany("App\Comment");
+
+    public function comments () {
+      return $this->morphMany('App\Comment', 'commentable');
     }
-    public function categories() {
-        return $this->belongsToMany('App\Category','article_category')->withTimestamps();
+
+    public function likes () {
+      return $this->morphMany('App\Like', 'liveable');
     }
-    public function lovers() {
-        return $this->belongsToMany('App\User', 'article_like')->withTimestamps();
+
+    public function tags () {
+      return $this->morphToMany('App\Tag', 'taggable');
     }
 }

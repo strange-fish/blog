@@ -37,7 +37,4 @@ class User extends Authenticatable
     public function profile() {
         return $this->hasOne('App\Profile');
     }
-    public function likeArticles() {
-      return $this->belongsToMany('App\Article', 'article_like');
-    }
 }

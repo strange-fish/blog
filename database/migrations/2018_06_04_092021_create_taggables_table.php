@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLikeCommentTable extends Migration
+class CreateTaggablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateLikeCommentTable extends Migration
      */
     public function up()
     {
-        Schema::create('like_comment', function (Blueprint $table) {
+        Schema::create('taggables', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->index();
-            $table->integer('comment_id')->unsigned()->index();
+            $table->integer('tag_id')->unsigned();
+            $table->integer('taggable_id')->unsigned();
+            $table->string('taggable_type');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateLikeCommentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('like_comment');
+        Schema::dropIfExists('taggable');
     }
 }

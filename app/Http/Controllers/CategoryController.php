@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+use App\Tag;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         //
-      $categories = Category::query()->paginate(15)->get();
+      $categories = Tag::query()->paginate(15)->get();
       return self::success($categories);
     }
 
@@ -31,7 +31,7 @@ class CategoryController extends Controller
         //
       $name = $request->get('name');
       try {
-        Category::query()->create(['name' => $name]);
+        Tag::query()->create(['name' => $name]);
         return self::success();
       } catch (\Exception $e) {
         return self::fail($e);
@@ -41,10 +41,10 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Category  $category
+     * @param  \App\Tag  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(Tag $category)
     {
         //
       return self::success($category);
@@ -56,20 +56,20 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Category  $category
+     * @param  \App\Tag  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, Tag $category)
     {
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Category  $category
+     * @param  \App\Tag  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(Tag $category)
     {
       try {
         $category->delete();
