@@ -18,7 +18,7 @@ class InvoicePaid extends Notification
      */
     public function __construct()
     {
-        //
+
     }
 
     /**
