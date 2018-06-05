@@ -17,8 +17,9 @@ class CreateLikesTable extends Migration
           $table->increments('id');
           // 1 for like, -1 for unlike!
           $table->tinyInteger('status')->default(0);
+          $table->integer('user_id')->unsigned();
           $table->integer('likeable_id')->unsinged();
-          $table->string('like_type');
+          $table->string('likeable_type');
           $table->timestamps();
         });
     }

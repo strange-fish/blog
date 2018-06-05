@@ -12,7 +12,13 @@ class Comment extends Model
     public function author () {
       return $this->belongsTo('App\User');
     }
+
     public function commentable () {
       return $this->morphTo();
     }
+
+    public function likes () {
+      return $this->morphMany('App\Like', 'likeable');
+    }
+
 }

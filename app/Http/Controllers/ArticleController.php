@@ -19,12 +19,12 @@ class ArticleController extends Controller
      */
     public function __construct()
     {
-      $this->middleware('auth:api');
+      $this->middleware('auth:api')->except(['show']);
     }
 
     public function index()
     {
-      $articles = Article::with('author')->get();
+      $articles = Article::with(['tags', 'author'])->get();
 
       return self::success($articles);
     }
@@ -57,7 +57,8 @@ class ArticleController extends Controller
    */
 
     public function getAdmin() {
-      return self::success(Auth::user()->articles);
+      $articles = Auth::user()->articles()->paginate(15);
+      return self::success($articles);
     }
 
     /**
@@ -69,7 +70,7 @@ class ArticleController extends Controller
     public function show($id)
     {
         //
-      $article = Article::with('categories')->find($id);
+      $article = Article::with(['tags', 'author'])->find($id);
 
       return $article ? self::success($article) : self::fail("doesn't exist!");
     }
@@ -112,12 +113,29 @@ class ArticleController extends Controller
       return self::success($comment);
     }
 
-    public function like($article, User $user) {
-      $user->likeArticles()->syncWithoutDetaching($article);
+    public function like(Article $article) {
+      $user = Auth::user();
+      $like = $article->likes()->where('user_id', $user->id)->first();
+      if ($like) {
+        return self::fail('you already like it!');
+      }
+      $article->likes()->create([
+        'user_id' => $user->id,
+        'status' => 1
+      ]);
       return self::success();
+
     }
-    public function unlike($article) {
-      $res = Auth::user()->likeArticles()->detach($article);
-      return $res ? self::success() : self::fail('already deleted!');
+
+    public function dislike(Article $article, User $user) {
+      $like = $article->likes()->where('user_id', $user->id)->first();
+      if (!$like) {
+        return self::fail('you already hate it');
+      }
+      $article->likes()->create([
+        'user_id' => $user->id,
+        'status' => -1
+      ]);
+      return self::success();
     }
 }

@@ -18,7 +18,7 @@ class Article extends Model
     }
 
     public function likes () {
-      return $this->morphMany('App\Like', 'liveable');
+      return $this->morphMany('App\Like', 'likeable');
     }
 
     public function tags () {
