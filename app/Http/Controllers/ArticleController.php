@@ -114,6 +114,7 @@ class ArticleController extends Controller
     }
 
     public function like(Article $article) {
+      if (!$article) return self::fail("article doesn't exist!");
       $user = Auth::user();
       $like = $article->likes()->where('user_id', $user->id)->first();
       if ($like) {
